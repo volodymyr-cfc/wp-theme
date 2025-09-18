@@ -1,0 +1,46 @@
+name: Theme Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: "Project Name"
+        default: "My Theme"
+      slug:
+        description: "Theme Slug"
+        default: "my-theme"
+      author:
+        description: "Author"
+        default: "Theme Team"
+      extra:
+        description: "Extra templates (Name:file format, space separated)"
+        default: "About:tpl-about.php Contact:tpl-contact.php"
+      blocks:
+        description: "ACF blocks (space separated)"
+        default: "accordion slider gallery text-image testimonial"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Run builder
+        run: |
+          python builder.py \
+            --project "${{ github.event.inputs.project }}" \
+            --slug "${{ github.event.inputs.slug }}" \
+            --author "${{ github.event.inputs.author }}" \
+            --extra ${{ github.event.inputs.extra }} \
+            --blocks ${{ github.event.inputs.blocks }}
+
+      - name: Upload zip
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.inputs.slug }}
+          path: ${{ github.event.inputs.slug }}.zip
