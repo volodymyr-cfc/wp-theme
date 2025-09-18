@@ -1,0 +1,163 @@
+// reset
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0 none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  box-sizing: border-box;
+  &:before, &:after {box-sizing: inherit}
+}
+
+html, body {height: 100%}
+
+html {
+  font: 400 #{$fb}/1.5 $ff;
+  -ms-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  -webkit-overflow-scrolling: touch;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: $tx;
+  background-color: #fff;
+  @include rwd-max(1024) {
+    &.is_overflow {overflow: hidden}
+  }
+}
+
+#main {
+  flex: 1 0 auto;
+  margin-top: 60px;
+  @include rwd-min(1025) {margin-top: 80px}
+
+  > *:not(#search_field) {
+    margin-bottom: 80px;
+    @include rwd-min(1025) { margin-bottom: 120px; }
+  }
+}
+
+.container {
+  width: 1140px;
+  max-width: calc(100% - 48px);
+  margin: 0 auto;
+  position: relative;
+  @include rwd-range(1024, 481) {max-width: calc(100% - 78px)}
+  @include rwd-min(1025) {max-width: calc(100% - 144px)}
+
+  &.container-md {
+    @include rwd-min(1025) {
+      width: 1440px;
+    }
+  }
+
+  &.container-lg {
+    @include rwd-min(1600) { width: 1600px; }
+  }
+
+}
+
+article, aside, figure, footer, header, nav, section {display: block}
+
+button {background: rgba(255, 255, 255, 0); border: medium none; cursor: pointer;}
+
+ol {list-style-position: inside}
+
+strong, b {font-weight: 700}
+
+td {vertical-align: middle}
+
+table {border-spacing: 0}
+
+mark {background: none}
+
+ul {list-style: none}
+
+img {
+  height: auto;
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  transition: all 0.3s ease;
+  color: $cl;
+  outline: 0 none;
+  text-decoration: none;
+  @include hover {
+    outline: 0 none;
+    text-decoration: none;
+  }
+  > img {border: 0}
+}
+
+input:not([type="submit"]):not([type="button"]):not([type="radio"]):not([type="checkbox"]), select, textarea {
+  transition: all 0.3s ease;
+  width: 100%;
+  outline: 0 none;
+  border-radius: 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  &:-webkit-autofill {
+    -webkit-text-fill-color: $tx !important;
+    -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+  }
+}
+
+input[type="submit"],
+input[type="button"] {
+  width: auto;
+  border: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+input, textarea {
+  @include placeholder {color: $tx; opacity: 1}
+}
+
+// selection
+::selection {color: $tx; background-color: $cl}
+
+::-moz-selection {color: $tx; background-color: $cl}
+
+// custom scrollbar - chrome
+html::-webkit-scrollbar {
+  width: 6px;
+  @include rwd-min(1025) {width: 8px}
+}
+
+::-webkit-scrollbar-thumb {background-color: $tx}
+
+::-webkit-scrollbar-track {background-color: #eaeaea}
+
+::-webkit-scrollbar-thumb:hover {background-color: darken($tx, 5%)}
+
+::-webkit-scrollbar-thumb:active {background-color: darken($tx, 5%)}
+
+// custom scrollbar - firefox
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: $tx #eaeaea;
+}
+
+// disable default focus
+:focus {outline: 0 none}
+
+// enable focus for tabbable elements
+a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable], audio[controls], video[controls], summary, [tabindex^="0"], [tabindex^="1"], [tabindex^="2"], [tabindex^="3"], [tabindex^="4"], [tabindex^="5"], [tabindex^="6"], [tabindex^="7"], [tabindex^="8"], [tabindex^="9"] {
+  &:focus,
+  &:focus-visible {
+    transition: none;
+    outline: 2px dashed $cl;
+  }
+
+  .is_using_mouse & {
+    &:focus,
+    &:focus-visible {outline: 0 none}
+  }
+}

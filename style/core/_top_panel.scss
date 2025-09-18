@@ -1,0 +1,51 @@
+// top-panel
+.top_panel {
+  &__primary {
+    padding: 70px 0;
+  }
+
+  &__secondary {
+    padding: 50px 0;
+  }
+
+  &__default {
+    padding: 40px 0 30px;
+    @include rwd-min(768) {padding-top: 50px}
+  }
+
+  h1 {padding-bottom: 0}
+}
+
+.top_panel__primary,
+.top_panel__secondary {
+  display: flex;
+  align-items: center;
+  min-height: 290px;
+  margin-bottom: 30px;
+  position: relative;
+  @include rwd-min(768) {
+    min-height: 480px;
+    margin-bottom: 50px;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $shadow;
+  }
+
+  figure, picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+  }
+
+  h1 {color: #fff}
+}

@@ -1,0 +1,33 @@
+@import '../import/import';
+@import '../modules/selectric';
+
+.posts {
+  &__filters {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: center;
+    gap: 24px;
+    position: relative;
+    margin-bottom: 64px;
+    > * {
+      grid-column: span 12;
+      @include rwd-min(540) {
+        grid-column: span 6;
+      }
+      @include rwd-min(1025) {
+        grid-column: span 2;
+      }
+    }
+  }
+}
+
+.form_search_ajax {
+  position: relative;
+  input[type='text'] {
+    padding-right: 40px !important;
+  }
+  button {
+    @include center(false, true);
+    right: 20px;
+  }
+}

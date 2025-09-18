@@ -1,0 +1,78 @@
+// mixins
+@mixin rwd-max($px) {
+  $min-width: #{$px}px;
+  @media screen and (max-width: $min-width) {@content}
+}
+@mixin rwd-min($px) {
+  $min-width: #{$px}px;
+  @media screen and (min-width: $min-width) {@content}
+}
+@mixin rwd-range($px, $px2) {
+  $max-width: #{$px}px;
+  $min-width: #{$px2}px;
+  @media screen and (max-width: $max-width) and (min-width: $min-width) {@content}
+}
+
+@mixin hover {
+  &:active {@content}
+  @include rwd-min(1025) {
+    &:hover {@content}
+  }
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder { @content; }
+  &:-moz-placeholder           { @content; }
+  &::-moz-placeholder          { @content; }
+  &:-ms-input-placeholder      { @content; }
+}
+
+@mixin columns($count: 2, $gap: 0) {
+  -webkit-column-count: $count;
+  -moz-column-count: $count;
+  column-count: $count;
+  -webkit-column-gap: $gap;
+  -moz-column-gap: $gap;
+  column-gap: $gap;
+  > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+}
+
+@mixin center($horizontal: true, $vertical: true) {
+  position: absolute;
+  @if ($horizontal and $vertical) {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  } @else if ($horizontal) {
+    left: 50%;
+    transform: translate(-50%, 0);
+  } @else if ($vertical) {
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}
+
+@mixin flex_class($type: default) {
+  display: flex;
+
+  @if ($type == start) {
+    align-items: flex-start;
+    justify-content: space-between;
+  } @else if ($type == center) {
+    align-items: center;
+    justify-content: center;
+  } @else {
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+//create a mixin for css grid columns when column start and end
+@mixin grid_columns($start, $end) {
+  grid-column-start: $start;
+  grid-column-end: $end;
+}

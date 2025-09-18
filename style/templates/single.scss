@@ -1,0 +1,12 @@
+@import '../import/import';
+
+.single_post {
+  &__meta {
+    margin-bottom: 20px;
+
+    .shrs {margin-top: 20px}
+  }
+
+  &__thumb {margin-bottom: 30px}
+
+}
