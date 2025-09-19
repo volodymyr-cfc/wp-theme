@@ -2,7 +2,7 @@ import os, shutil, zipfile, json, datetime, argparse
 
 def build_theme(project, slug, author, extra_templates, acf_blocks):
     base_dir = os.path.dirname(__file__)
-    theme_dir = os.path.join(base_dir, "wp_theme")  # your starter theme
+    theme_dir = os.path.join(base_dir, "new-wp-theme")  # your starter theme
     new_theme = os.path.join(base_dir, slug)
 
     if os.path.exists(new_theme):
