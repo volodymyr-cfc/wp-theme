@@ -2,12 +2,17 @@ import os, shutil, zipfile, json, datetime, argparse
 
 def build_theme(project, slug, author, extra_templates, acf_blocks):
     base_dir = os.path.dirname(__file__)
-    theme_dir = os.path.join(base_dir, "new-wp-theme")  # your starter theme
+    repo_root = base_dir  # the repo root IS the theme
     new_theme = os.path.join(base_dir, slug)
 
+    # Clean old build
     if os.path.exists(new_theme):
         shutil.rmtree(new_theme)
-    shutil.copytree(theme_dir, new_theme)
+
+    # Copy everything from repo root → new slug folder
+    shutil.copytree(repo_root, new_theme, ignore=shutil.ignore_patterns(
+        ".git", ".github", "builder.py", f"{slug}.zip", "__pycache__"
+    ))
 
     today = datetime.date.today().isoformat()
 
@@ -33,9 +38,10 @@ Text Domain: {slug}
     pkg.setdefault("version", "1.0.0")
     json.dump(pkg, open(pkg_path, "w"), indent=2)
 
-    # Extra templates
+    # Extra templates (PHP + SCSS)
     for name, file in extra_templates:
-        path = os.path.join(new_theme, file)
+        # PHP template
+        php_path = os.path.join(new_theme, file)
         tpl = f"""<?php
 /*
 Template Name: {name}
@@ -46,10 +52,19 @@ while(have_posts()): the_post(); ?>
 <?php endwhile;
 get_footer();
 """
-        with open(path, "w") as f:
+        with open(php_path, "w") as f:
             f.write(tpl)
 
-    # ACF blocks (with renamed files)
+        # SCSS file in /style/templates
+        scss_dir = os.path.join(new_theme, "style", "templates")
+        os.makedirs(scss_dir, exist_ok=True)
+
+        base_name = os.path.splitext(os.path.basename(file))[0]  # e.g. tpl-about
+        scss_path = os.path.join(scss_dir, f"{base_name}.scss")
+        with open(scss_path, "w") as f:
+            f.write("@import '../import/import';\n")
+
+    # ACF blocks (renamed files)
     blocks_dir = os.path.join(new_theme, "tpl-acf-blocks")
     os.makedirs(blocks_dir, exist_ok=True)
     for b in acf_blocks:
@@ -58,9 +73,9 @@ get_footer();
         open(os.path.join(b_dir, f"{b}.js"), "w").write(f"// JS for {b}\n")
         json.dump({"name": f"{slug}/{b}", "title": b.title()}, open(os.path.join(b_dir, f"{b}.json"), "w"), indent=2)
         open(os.path.join(b_dir, f"{b}.php"), "w").write(f"<?php echo '<div>{b} block</div>'; ?>")
-        open(os.path.join(b_dir, f"{b}.scss"), "w").write(f".block-{b} {{}}")
+        open(os.path.join(b_dir, f"{b}.scss"), "w").write("@import '../../style/import/import';\n")
 
-    # Zip it
+    # Zip the new theme
     zip_path = os.path.join(base_dir, f"{slug}.zip")
     shutil.make_archive(zip_path.replace(".zip", ""), "zip", new_theme)
     print(f"✅ Built theme: {zip_path}")
